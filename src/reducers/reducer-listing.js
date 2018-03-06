@@ -5,7 +5,8 @@ import {
     FETCHING_PERSON,
     FETCH_PERSON_SUCCESS,
     FETCH_PERSON_FAILURE,
-    EMPTY_LIST
+    EMPTY_LIST,
+    ADD_NEW_USER
 } from '../actions/action-types';
 
 const initialData = {
@@ -34,8 +35,6 @@ export default function listingStore(state=initialData, action){
                 isFetching: action.payload.isFetching 
             }
         case FETCH_REQUEST_SUCCESS:
-            console.log('---------------------',action.payload.listingData)
-            console.log('-state FETCH_REQUEST_SUCCESS--------------------', state)
             return{
                 ...state,
                 isFetching: action.payload.isFetching,
@@ -67,7 +66,12 @@ export default function listingStore(state=initialData, action){
                 isFetching: action.payload.isFetching,
                 errorData: action.payload.errorData
             }
-
+        case ADD_NEW_USER: {
+            return{
+                ...state,
+                singleObject: action.payload.singleObject
+            }
+        }
         default:
             return state;        
     }

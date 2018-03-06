@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getListingData } from '../actions/get-data';
 import { emptyList } from '../actions/empty-list';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class ListingPersons extends Component {
 
@@ -12,6 +13,21 @@ class ListingPersons extends Component {
 
     componentDidMount(){
         this.props.emptyList();
+    }
+
+    handleDelete(id){
+        axios.delete(`https://reqres.in/api/users/${id}`)
+            .then(response => {
+                console.log('delete response ',response);
+                this.props.history.push('/');
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    handleAddUser(){
+        this.props.history.push('/0');
     }
 
     render() {
@@ -39,12 +55,16 @@ class ListingPersons extends Component {
                             {data.first_name+' '+data.last_name}
                         </div>
                     </Link>
+                    <button onClick={() => this.handleDelete()}>Delete</button>
                 </div>
             )
         })
 
         return(
             <div>
+                <div>
+                    <button onClick={()=>this.handleAddUser()}>Add User</button>
+                </div>
                 <ul>
                     {dataBlocks}
                 </ul>
@@ -69,4 +89,4 @@ function mapStateToProps(state){
     };
 }
 
-export default connect(mapStateToProps, {getListingData, emptyList})(ListingPersons);
+export default connect(mapStateToProps, {getListingData, emptyList})(withRouter(ListingPersons));
